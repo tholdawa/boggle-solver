@@ -10,7 +10,7 @@ puts 'Enter the board followed by EOF (ctrl-d)'
 
 boardstring = ''
 
-while line = gets
+while (line = gets)
   boardstring += line
 end
 

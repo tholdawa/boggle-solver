@@ -2,6 +2,9 @@
 
 require_relative 'stringtree'
 
+# Dictionary class represents a set of valid words. This class handles the loading
+# of a dictionary file to a StringTree data structure, and delegates methods for
+# querying the contents of the StringTree after initialization
 class Dictionary
   def initialize(filename)
     @words = StringTree.new
@@ -16,11 +19,11 @@ class Dictionary
     @words.list_words
   end
 
-  def is_word(w)
-    @words.is_word(w)
+  def word?(word)
+    @words.word?(word)
   end
 
-  def is_prefix_of_word(w)
-    @words.is_prefix_of_word(w)
+  def prefix_of_word?(word)
+    @words.prefix_of_word?(word)
   end
 end

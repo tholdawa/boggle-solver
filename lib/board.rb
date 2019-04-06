@@ -2,6 +2,9 @@
 
 require_relative 'dictionary'
 
+# Board class represents the layout of a board in the game of boggle.
+# It is initialized with a string representing the letters of the board,
+# with the rows of the board delimited by newline characters.
 class Board
   def cardinalities
     [
@@ -29,33 +32,33 @@ class Board
     @board.each { |l| puts l.join ' ' }
   end
 
-  def within_bounds(x, y)
-    x >= 0 && x < @size_x &&
-      y >= 0 && y < @size_y
+  def within_bounds(x_coord, y_coord)
+    x_coord >= 0 && x_coord < @size_x &&
+      y_coord >= 0 && y_coord < @size_y
   end
 
-  def letter_at(x, y)
-    @board[x][y]
+  def letter_at(x_coord, y_coord)
+    @board[x_coord][y_coord]
   end
 
   def generate_words(start_x, start_y)
     _generate_words(start_x, start_y, '', [], [])
   end
 
-  def _generate_words(x, y, prefix, words, visited)
-    prefix = "#{prefix}#{letter_at(x, y)}"
-    if @dictionary.is_word(prefix)
+  def _generate_words(x_coord, y_coord, prefix, words, visited)
+    prefix = "#{prefix}#{letter_at(x_coord, y_coord)}"
+    if @dictionary.word?(prefix)
       # puts "#{prefix} was a word"
       words << prefix
     end
-    visited += [[x, y]]
-    # puts "generating words for  (#{x}, #{y}) - prefix #{prefix}"
+    visited += [[x_coord, y_coord]]
+    # puts "generating words for  (#{x_coord}, #{y_coord}) - prefix #{prefix}"
     # puts "Visited: #{visited.inspect}"
     cardinalities.each do |card|
-      new_x = x + card[0]
-      new_y = y + card[1]
+      new_x = x_coord + card[0]
+      new_y = y_coord + card[1]
       if within_bounds(new_x, new_y) && !visited.include?([new_x, new_y]) &&
-         @dictionary.is_prefix_of_word(prefix)
+         @dictionary.prefix_of_word?(prefix)
         _generate_words(new_x, new_y, prefix, words, visited)
       end
     end
@@ -63,12 +66,12 @@ class Board
   end
 
   def generate_all_words
-    (0..@size_x - 1).to_a.product((0..@size_y - 1).to_a).map do |(x, y)|
-      # puts "Generating all words for coordinates #{x}, #{y}"
-      generate_words(x, y)
+    (0..@size_x - 1).to_a.product((0..@size_y - 1).to_a).map do |(x_coord, y_coord)|
+      # puts "Generating all words for coordinates #{x_coord}, #{y_coord}"
+      generate_words(x_coord, y_coord)
     end
                     .flatten
                     .sort
                     .uniq
   end
- end
+end
