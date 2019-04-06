@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StringTree
   def initialize
     @tree = {}
@@ -17,32 +19,32 @@ class StringTree
 
   def is_word(word)
     if word.empty?
-      return @is_word
+      @is_word
     else
       head = word[0]
       tail = word[1..-1]
-      return @tree[head] && @tree[head].is_word(tail)
+      @tree[head]&.is_word(tail)
     end
   end
 
   def is_prefix_of_word(word)
     if word.empty?
-      return true
+      true
     else
       head = word[0]
       tail = word[1..-1]
-      return @tree[head] && @tree[head].is_prefix_of_word(tail)
+      @tree[head]&.is_prefix_of_word(tail)
     end
   end
 
   def list_words
     set = []
-    self._list_words('', set)
-    return  set
+    _list_words('', set)
+    set
   end
 
   def _list_words(prefix, set)
     set << prefix if @is_word
-    @tree.each {|letter, subtree| subtree._list_words("#{prefix}#{letter}", set)}
+    @tree.each { |letter, subtree| subtree._list_words("#{prefix}#{letter}", set) }
   end
 end
